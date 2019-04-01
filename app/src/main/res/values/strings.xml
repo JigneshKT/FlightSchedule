@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TestProject</string>
+    <string name="schedule_flight_label">Schedule a flight</string>
+    <string name="departure_select">select departure</string>
+    <string name="arrivale_select">select arrival</string>
+    <string name="show_on_map_label">Click here to see on Map</string>
+    <string name="select_airport_error">Please select arrival and departure airports first!</string>
+</resources>
