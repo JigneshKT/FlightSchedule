@@ -1,12 +1,15 @@
 package jigneshkt.test.com.testproject.presentation.ui.airportlist;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 
 import com.google.gson.Gson;
 
@@ -19,10 +22,13 @@ import jigneshkt.test.com.testproject.R;
 import jigneshkt.test.com.testproject.base.BaseActivity;
 import jigneshkt.test.com.testproject.domain.model.Airport;
 
+import static jigneshkt.test.com.testproject.presentation.ui.flightschedule.FlightScheduleActivity.ACTION_BAR_TITLE;
+
 public class AirportListActivity  extends BaseActivity<AirportListPresenter> implements AirportListView, SwipeRefreshLayout.OnRefreshListener {
 
 
     public static String AIRPORT_DATA_STRING = "AIRPORT_STRING";
+
 
     @BindView(R.id.mRecyclerView)
     RecyclerView mRecyclerView;
@@ -61,7 +67,13 @@ public class AirportListActivity  extends BaseActivity<AirportListPresenter> imp
     @Override
     protected void configureViews() {
         super.configureViews();
-
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(getIntent().getStringExtra(ACTION_BAR_TITLE));
+            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.app_background_theme)));
+        }
     }
 
     @Override
@@ -149,5 +161,13 @@ public class AirportListActivity  extends BaseActivity<AirportListPresenter> imp
         getPresenter().loadMore(currentPage);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 }

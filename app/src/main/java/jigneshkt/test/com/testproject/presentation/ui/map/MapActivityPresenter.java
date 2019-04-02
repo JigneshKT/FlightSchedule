@@ -1,7 +1,6 @@
 package jigneshkt.test.com.testproject.presentation.ui.map;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.content.Intent;
 
 import com.google.gson.Gson;
 
@@ -31,21 +30,17 @@ public class MapActivityPresenter extends BaseActivityPresenter<MapActivityView>
         super.updateViewState();
     }
 
-
-    @Override
-    protected void setup(@Nullable Bundle arguments) {
-        super.setup(arguments);
-
-        if (arguments != null && arguments.containsKey(ARRIVAL_AIRPORT)) {
-            String arrivalAirportStr = arguments.getString(ARRIVAL_AIRPORT);
+    public void setUpAirports(Intent intent){
+        if (intent != null && intent.hasExtra(ARRIVAL_AIRPORT)) {
+            String arrivalAirportStr = intent.getStringExtra(ARRIVAL_AIRPORT);
             if (arrivalAirportStr!=null && !arrivalAirportStr.isEmpty()) {
                 arrival = new Gson().fromJson(arrivalAirportStr, Airport.class);
             }
         }
 
 
-        if (arguments != null && arguments.containsKey(DEPARTURE_AIRPORT)) {
-            String departureAirportStr = arguments.getString(DEPARTURE_AIRPORT);
+        if (intent != null && intent.hasExtra(DEPARTURE_AIRPORT)) {
+            String departureAirportStr = intent.getStringExtra(DEPARTURE_AIRPORT);
             if (departureAirportStr != null && !departureAirportStr.isEmpty()) {
                 departure = new Gson().fromJson(departureAirportStr, Airport.class);
             }

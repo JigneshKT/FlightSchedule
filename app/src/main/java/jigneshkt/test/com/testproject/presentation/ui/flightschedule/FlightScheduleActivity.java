@@ -7,6 +7,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +36,8 @@ public class FlightScheduleActivity extends BaseActivity<FlightSchedulePresenter
 
     private final int REQUEST_CODE_ARRIVAL = 103;
     private final int REQUEST_CODE_DEPARTURE = 140;
+    private final int REQUEST_CODE_MAP = 150;
+    public static String ACTION_BAR_TITLE = "ACTION_BAR_TITLE";
 
     @BindView(R.id.rv_flight_schedule)
     RecyclerView mRecyclerView;
@@ -47,6 +51,9 @@ public class FlightScheduleActivity extends BaseActivity<FlightSchedulePresenter
 
     @BindView(R.id.tv_departure)
     TextView tv_departure;
+
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
 
 
     private FlightScheduleRecyclerAdapter mAdapter;
@@ -75,9 +82,10 @@ public class FlightScheduleActivity extends BaseActivity<FlightSchedulePresenter
     public void startMapActivity(){
         if(getPresenter().getArrivalAirport()!=null && getPresenter().getDepartureAirport()!=null){
             Intent intent = new Intent(this,MapActivity.class);
+            intent.putExtra(ACTION_BAR_TITLE,getString(R.string.map_activity_title));
             intent.putExtra(ARRIVAL_AIRPORT,new Gson().toJson(getPresenter().getArrivalAirport()));
             intent.putExtra(DEPARTURE_AIRPORT,new Gson().toJson(getPresenter().getDepartureAirport()));
-            startActivity(intent);
+            startActivityForResult(intent,REQUEST_CODE_MAP);
         }else{
             Toast.makeText(this,R.string.select_airport_error,Toast.LENGTH_LONG).show();
         }
@@ -131,7 +139,6 @@ public class FlightScheduleActivity extends BaseActivity<FlightSchedulePresenter
         mRecyclerView.addOnScrollListener(new PaginationScrollListener(mLayoutManager) {
             @Override
             protected void loadMoreItems() {
-                isLoading = true;
                 currentPage++;
                 preparedListItem();
 
@@ -151,7 +158,9 @@ public class FlightScheduleActivity extends BaseActivity<FlightSchedulePresenter
 
 
     private void startAirportListingActivity(int requestCode){
-        startActivityForResult(new Intent(this, AirportListActivity.class),requestCode);
+        Intent intent = new Intent(this, AirportListActivity.class);
+        intent.putExtra(ACTION_BAR_TITLE,requestCode==REQUEST_CODE_ARRIVAL?getString(R.string.arrivale_select):getString(R.string.departure_select));
+        startActivityForResult(intent,requestCode);
     }
 
     @Override
@@ -216,16 +225,40 @@ public class FlightScheduleActivity extends BaseActivity<FlightSchedulePresenter
 
 
     private void preparedListItem() {
+        isLoading = true;
         getPresenter().loadMore(currentPage);
     }
 
     @Override
     public void onFlightScheduleFailure() {
-
+        isLoading=false;
+        isLastPage=true;
+        mAdapter.clear();
     }
 
     @Override
     public void onFlightNotFound() {
+        isLoading=false;
+        isLastPage=true;
+        mAdapter.removeLoading();
+        Toast.makeText(this,getString(R.string.no_flight_found),Toast.LENGTH_LONG).show();
+    }
 
+    @Override
+    public void onFlightNoMoreFound() {
+        mAdapter.removeLoading();
+        isLoading=false;
+        isLastPage=true;
+    }
+
+
+    @Override
+    public void showLoading() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void removeLoading() {
+        progressBar.setVisibility(View.GONE);
     }
 }

@@ -1,8 +1,12 @@
 <resources>
+    <string name="credentials_check_label">Checking credentials...</string>
+    <string name="credentials_fail_label">Authentication fail</string>
     <string name="app_name">TestProject</string>
     <string name="schedule_flight_label">Schedule a flight</string>
-    <string name="departure_select">select departure</string>
-    <string name="arrivale_select">select arrival</string>
+    <string name="departure_select">Select departure</string>
+    <string name="arrivale_select">Select arrival</string>
     <string name="show_on_map_label">Click here to see on Map</string>
     <string name="select_airport_error">Please select arrival and departure airports first!</string>
+    <string name="map_activity_title">Map Route</string>
+    <string name="no_flight_found">No schedule flights between origin and destination</string>
 </resources>

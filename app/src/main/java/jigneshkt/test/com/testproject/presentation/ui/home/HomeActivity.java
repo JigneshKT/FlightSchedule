@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
+import android.widget.TextView;
 
 import javax.inject.Inject;
 
@@ -16,9 +16,8 @@ import jigneshkt.test.com.testproject.presentation.ui.flightschedule.FlightSched
 
 public class HomeActivity extends BaseActivity<HomeActivityPresenter> implements HomeActivityView {
 
-
-    @BindView(R.id.recyclerview_person_card_list)
-    RecyclerView recyclerview_person_card_list;
+    @BindView(R.id.tv_authentication)
+    TextView tv_authentication;
 
 
     @Inject
@@ -60,6 +59,6 @@ public class HomeActivity extends BaseActivity<HomeActivityPresenter> implements
 
     @Override
     public void onAuthenticationFailure() {
-
+        tv_authentication.setText(getString(R.string.credentials_fail_label));
     }
 }

@@ -67,6 +67,7 @@ public class FlightSchedulePresenter extends BaseActivityPresenter<FlightSchedul
 
 
     private void getFlightSchedule(int currentPage){
+        view.showLoading();
         getFlightScheduleUseCase
                 .withOrigin(departureAirport.getAirportCode())
                 .withDestination(arrivalAirport.getAirportCode())
@@ -77,6 +78,7 @@ public class FlightSchedulePresenter extends BaseActivityPresenter<FlightSchedul
                 .execute(new DisposableObserver<ArrayList<FlightSchedule>>() {
                     @Override
                     public void onNext(ArrayList<FlightSchedule> flightSchedules) {
+                        view.removeLoading();
                         if(flightSchedules!=null && flightSchedules.size()>0) {
                             addAll(flightSchedules);
                             view.onFlightScheduleSuccess(flightSchedules);
@@ -86,9 +88,14 @@ public class FlightSchedulePresenter extends BaseActivityPresenter<FlightSchedul
 
                     @Override
                     public void onError(Throwable e) {
+                        view.removeLoading();
                         Log.e(TAG,"e: "+e.getLocalizedMessage());
                         if(e instanceof HttpException && ((HttpException) e).code() == 404){
-                            view.onFlightNotFound();
+
+                            if(flightSchedules.isEmpty())
+                                view.onFlightNotFound();
+                            else
+                                view.onFlightNoMoreFound();
                         }else{
                             view.onFlightScheduleFailure();
                         }

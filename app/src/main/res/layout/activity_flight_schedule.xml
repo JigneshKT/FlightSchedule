@@ -92,7 +92,8 @@
         android:text="@string/show_on_map_label"
         android:padding="8dp"
         android:gravity="center"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
+        android:background="@android:color/black"
         android:textSize="20sp"
         />
 
@@ -100,8 +101,9 @@
         android:id="@+id/sr_flight_schedule"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:background="#000000"
+        android:background="@android:color/white"
         app:layout_constraintTop_toBottomOf="@id/tv_start_map">
+
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_flight_schedule"
@@ -110,7 +112,16 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"
+        />
+
 </android.support.constraint.ConstraintLayout>
-
-
 </android.support.design.widget.CoordinatorLayout>

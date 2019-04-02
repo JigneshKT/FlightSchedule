@@ -16,5 +16,11 @@ public interface FlightScheduleView extends BaseActivityView {
     void onFlightScheduleFailure();
     void onFlightNotFound();
 
+    void onFlightNoMoreFound();
+
+
+    void showLoading();
+    void removeLoading();
+
 
 }

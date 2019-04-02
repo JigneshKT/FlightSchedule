@@ -1,7 +1,11 @@
 package jigneshkt.test.com.testproject.presentation.ui.map;
 
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
+import android.view.MenuItem;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -15,6 +19,8 @@ import javax.inject.Inject;
 
 import jigneshkt.test.com.testproject.R;
 import jigneshkt.test.com.testproject.base.BaseActivity;
+
+import static jigneshkt.test.com.testproject.presentation.ui.flightschedule.FlightScheduleActivity.ACTION_BAR_TITLE;
 
 public class MapActivity extends BaseActivity<MapActivityPresenter> implements MapActivityView, OnMapReadyCallback {
 
@@ -47,13 +53,20 @@ public class MapActivity extends BaseActivity<MapActivityPresenter> implements M
     @Override
     protected void configureViews() {
         super.configureViews();
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(getIntent().getStringExtra(ACTION_BAR_TITLE));
+            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.app_background_theme)));
+        }
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.supported_map);
         mapFragment.getMapAsync(this);
     }
 
 
     @Override
-    @SuppressWarnings("MissingPermission")
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
         showAirports();
@@ -61,6 +74,9 @@ public class MapActivity extends BaseActivity<MapActivityPresenter> implements M
 
 
     private void showAirports(){
+
+        getPresenter().setUpAirports(getIntent());
+
         LatLng departureLatLng = new LatLng(getPresenter().getDeparture().getLatitude(), getPresenter().getDeparture().getLongitude());
         googleMap.addMarker(new MarkerOptions().position(departureLatLng).title(getPresenter().getDeparture().getName()));
 
@@ -77,7 +93,23 @@ public class MapActivity extends BaseActivity<MapActivityPresenter> implements M
                 .include(arrivalLatLng)
                 .build();
 
-        int zoomPadding = 20;
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, zoomPadding));
+        // begin new code:
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = getResources().getDisplayMetrics().heightPixels;
+        int padding = (int) (width * 0.25);
+
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(latLngBounds, width, height, padding);// end of new code
+
+        googleMap.animateCamera(cu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
