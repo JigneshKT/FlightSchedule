@@ -1,7 +1,7 @@
 <resources>
     <string name="credentials_check_label">Checking credentials...</string>
     <string name="credentials_fail_label">Authentication fail</string>
-    <string name="app_name">TestProject</string>
+    <string name="app_name">JigneshKTest</string>
     <string name="schedule_flight_label">Schedule a flight</string>
     <string name="departure_select">Select departure</string>
     <string name="arrivale_select">Select arrival</string>
