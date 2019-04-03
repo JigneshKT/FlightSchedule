@@ -93,11 +93,13 @@ public class FlightScheduleRecyclerAdapter extends RecyclerView.Adapter<BaseView
 
     public void removeLoading() {
         isLoaderVisible = false;
-        int position = mPostItems.size() - 1;
-        FlightSchedule item = getItem(position);
-        if (item != null) {
-            mPostItems.remove(position);
-            notifyItemRemoved(position);
+        if(mPostItems.size()>0) {
+            int position = mPostItems.size() - 1;
+            FlightSchedule item = getItem(position);
+            if (item != null) {
+                mPostItems.remove(position);
+                notifyItemRemoved(position);
+            }
         }
     }
 

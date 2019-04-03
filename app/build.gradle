@@ -1,11 +1,9 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'com.jakewharton.hugo'
 
 
 android {
-    buildToolsVersion '26.0.2'
     compileSdkVersion 28
     defaultConfig {
         applicationId "jigneshkt.test.com.testproject"
@@ -45,8 +43,8 @@ dependencies {
     implementation "com.android.support:design:$support_version"
 
 
-    compile "io.reactivex.rxjava2:rxjava:$rxjava_version"
-    compile "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
 
 
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
@@ -71,7 +69,5 @@ dependencies {
 
 
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
 }
